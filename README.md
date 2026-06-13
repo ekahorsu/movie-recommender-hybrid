@@ -9,6 +9,7 @@ This project recommends movies using the MovieLens dataset (100,836 ratings from
 1. Collaborative filtering, which recommends based on the rating patterns of similar items, using item-item cosine similarity.
 2. Content-based filtering, which recommends movies similar in genre to those a user already rates highly.
 3. A hybrid model that blends the two with a tunable weight, validated by held-out RMSE against baselines.
+4. A neural collaborative filtering model in Keras that learns user and movie embeddings, compared against the classical methods.
 
 Every rated movie in the dataset also carries genre metadata, so the ratings and content can be joined cleanly on a shared movie identifier. Both data files ship with the repository, so the notebook runs without any network access.
 
@@ -23,8 +24,9 @@ Models were evaluated by root mean squared error (RMSE) on held-out ratings, on 
 | Content-based | 1.00 |
 | Collaborative filtering | 0.87 |
 | Hybrid (alpha = 0.7) | 0.88 |
+| Neural collaborative filtering | 0.85 |
 
-Collaborative filtering is the strongest single method and clearly beats both baselines. On this dataset the collaborative signal is strong enough that blending in the genre-based content score does not improve accuracy further, so pure collaborative filtering performs best. This is a useful finding in itself: a hybrid is only worthwhile when each component contributes information the other lacks, and here the content signal is largely redundant for rating prediction. The matrix is over 98 percent empty, which is the central difficulty of recommendation: the model must infer the unrated majority of entries from the rated minority.
+Among the classical methods, collaborative filtering is the strongest and clearly beats both baselines, while blending in the genre-based content score does not improve accuracy further. This is a useful finding in itself: a hybrid is only worthwhile when each component contributes information the other lacks, and here the content signal is largely redundant for rating prediction. The neural collaborative filtering model, which learns user and movie embeddings directly from the ratings, achieves the best accuracy overall, though by a modest margin. This is consistent with the general pattern that classical similarity methods remain strong baselines on small, sparse datasets, with neural approaches pulling further ahead at larger scale. The matrix is over 98 percent empty, which is the central difficulty of recommendation: the model must infer the unrated majority of entries from the rated minority.
 
 ## How to run
 
@@ -43,6 +45,7 @@ Tested with Python 3.10. No internet connection is required; both data files are
 - **pandas** for the user-item matrix and data handling
 - **Matplotlib** for the data-exploration and hybrid-weighting plots
 - **scikit-learn** for the train/test split and RMSE metric
+- **TensorFlow / Keras** for the neural collaborative filtering model
 
 ## Repository contents
 
